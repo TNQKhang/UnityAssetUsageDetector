@@ -184,7 +184,6 @@ namespace AssetUsageDetectorNamespace
 		private readonly Func<Object> renderSettingsGetter = (Func<Object>) Delegate.CreateDelegate( typeof( Func<Object> ), typeof( RenderSettings ).GetMethod( "GetRenderSettings", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static ) );
 		private readonly Func<Cubemap> defaultReflectionProbeGetter = (Func<Cubemap>) Delegate.CreateDelegate( typeof( Func<Cubemap> ), typeof( RenderSettings ).GetProperty( "defaultReflection", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static ).GetGetMethod( true ) );
 
-		internal static readonly Func<SpriteAtlas, Sprite[]> spriteAtlasPackedSpritesGetter = (Func<SpriteAtlas, Sprite[]>) Delegate.CreateDelegate( typeof( Func<SpriteAtlas, Sprite[]> ), typeof( SpriteAtlasExtensions ).GetMethod( "GetPackedSprites", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static ) );
 #if ASSET_USAGE_ADDRESSABLES
 		private readonly PropertyInfo assetReferenceSubObjectTypeGetter = 
 			typeof( AssetReference ).GetProperty( "SubObjectType", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance )
@@ -1819,9 +1818,9 @@ namespace AssetUsageDetectorNamespace
 			string subObjectName = assetReference.SubObjectName;
 			if( !string.IsNullOrEmpty( subObjectName ) )
 			{
-				if( result is SpriteAtlas )
+				if( result is SpriteAtlas spriteAtlas)
 				{
-					Sprite[] packedSprites = spriteAtlasPackedSpritesGetter( (SpriteAtlas) result );
+					Sprite[] packedSprites = spriteAtlas.GetPackedSprites();
 					if( packedSprites != null )
 					{
 						for( int i = 0; i < packedSprites.Length; i++ )

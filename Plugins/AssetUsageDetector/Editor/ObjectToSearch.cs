@@ -99,7 +99,7 @@ namespace AssetUsageDetectorNamespace
 				// Add Sprites of SpriteAtlases to the sub-assets list
 				if( target is SpriteAtlas spriteAtlas )
 				{
-					Sprite[] packedSprites = AssetUsageDetector.spriteAtlasPackedSpritesGetter( spriteAtlas );
+					Sprite[] packedSprites = spriteAtlas.GetPackedSprites();
 					if( packedSprites != null )
 					{
 						for( int i = 0; i < packedSprites.Length; i++ )

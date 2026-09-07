@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Unity.Collections;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEditor.U2D;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.U2D;
 using Object = UnityEngine.Object;
 
 namespace AssetUsageDetectorNamespace
@@ -563,6 +565,73 @@ namespace AssetUsageDetectorNamespace
 			}
 
 			return false;
+		}
+		
+		public static Sprite[] GetPackedSprites(this SpriteAtlas spriteAtlas)
+		{
+			Object[] packables;
+        
+			SpriteAtlas masterAtlas = spriteAtlas.isVariant ? spriteAtlas.GetMasterAtlas() : null;
+        
+			if (masterAtlas != null)
+			{
+				packables = masterAtlas.GetPackables();
+			}
+			else
+			{
+				packables = spriteAtlas.GetPackables();
+			}
+
+			List<Sprite> sprites = new();
+
+			for (int i = 0; i < packables.Length; ++i)
+			{
+				Object packable = packables[i];
+				if (packable == null)
+					continue;
+            
+				if (packable is DefaultAsset folder)
+				{
+					string folderPath = AssetDatabase.GetAssetPath(folder);
+					string[] spriteGuids = AssetDatabase.FindAssets("t:Sprite", new[] { folderPath });
+					for (int j = 0; j < spriteGuids.Length; ++j)
+					{
+						string spritePath = AssetDatabase.GUIDToAssetPath(spriteGuids[j]);
+						Object[] assets = AssetDatabase.LoadAllAssetsAtPath(spritePath);
+                    
+						foreach (Object asset in assets)
+						{
+							if (asset is Sprite sprite)
+							{
+								sprites.Add(sprite);
+							}
+						}
+					}
+				}
+				else if (packable is Texture2D)
+				{
+					string texturePath = AssetDatabase.GetAssetPath(packable);
+					Object[] assets = AssetDatabase.LoadAllAssetsAtPath(texturePath);
+                
+					foreach (Object asset in assets)
+					{
+						if (asset is Sprite sprite)
+						{
+							sprites.Add(sprite);
+						}
+					}
+				}
+				else if (packable is Sprite sprite)
+				{
+					sprites.Add(sprite);
+				}
+				else
+				{
+					Debug.LogError("Packed is " + packable.GetType());
+				}
+			}
+			
+			return sprites.ToArray();
 		}
 	}
 }
