@@ -1826,7 +1826,7 @@ namespace AssetUsageDetectorNamespace
 #if UNITY_6000_6_OR_NEWER
 					Sprite[] packedSprites = spriteAtlas.GetPackedSprites();
 #else
-					Sprite[] packedSprites = AssetUsageDetector.spriteAtlasPackedSpritesGetter(spriteAtlas);
+					Sprite[] packedSprites = spriteAtlasPackedSpritesGetter(spriteAtlas);
 #endif
 					if( packedSprites != null )
 					{
