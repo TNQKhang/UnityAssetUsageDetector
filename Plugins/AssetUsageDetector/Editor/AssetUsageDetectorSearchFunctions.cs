@@ -1821,12 +1821,12 @@ namespace AssetUsageDetectorNamespace
 			string subObjectName = assetReference.SubObjectName;
 			if( !string.IsNullOrEmpty( subObjectName ) )
 			{
-				if( result is SpriteAtlas spriteAtlas)
+				if(result is SpriteAtlas spriteAtlas)
 				{
 #if UNITY_6000_6_OR_NEWER
 					Sprite[] packedSprites = spriteAtlas.GetPackedSprites();
 #else
-					Sprite[] packedSprites = AssetUsageDetector.spriteAtlasPackedSpritesGetter( spriteAtlas );
+					Sprite[] packedSprites = AssetUsageDetector.spriteAtlasPackedSpritesGetter(spriteAtlas);
 #endif
 					if( packedSprites != null )
 					{
